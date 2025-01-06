@@ -6,8 +6,5 @@
 # HL3-CL-ECO-EXTR-FFD-MEDIA-MY-SUP-SV-TAL-USTA-XUAR
 # See file LICENSE for full licensing information.
 
-export FILAMENT_INCLUDE=./include
-export QUANTA_INCLUDE=.
-
-all: 
-	cd src && make all
+all: hashtable.c
+	gcc -c hashtable.c -o hashtable.o -I../$(FILAMENT_INCLUDE) -I../$(QUANTA_INCLUDE) -D ENV_HOSTED

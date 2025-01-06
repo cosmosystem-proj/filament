@@ -12,6 +12,6 @@
 #include <quanta/include/types.h>
 
 int filament_hashtable_factory() {
-  malloc_wrapper(5);
+  void *abc = malloc_wrapper(5);
   return 5;
 }

@@ -7,11 +7,3 @@
  * HL3-CL-ECO-EXTR-FFD-MEDIA-MY-SUP-SV-TAL-USTA-XUAR
  * See file LICENSE for full licensing information.
  */
-
-#include <quanta/include/platform.h>
-#include <quanta/include/types.h>
-
-int filament_hashtable_factory(uint64_t size) {
-  void *abc = malloc_wrapper(5);
-  return 5;
-}

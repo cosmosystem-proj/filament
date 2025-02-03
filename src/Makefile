@@ -6,5 +6,15 @@
 # HL3-CL-ECO-EXTR-FFD-MEDIA-MY-SUP-SV-TAL-USTA-XUAR
 # See file LICENSE for full licensing information.
 
-all: hashtable.c
-	gcc -c hashtable.c -o hashtable.o -I../$(FILAMENT_INCLUDE) -I../$(QUANTA_INCLUDE) -D ENV_HOSTED
+CC = gcc
+
+all: filament.a
+
+filament.a: hashtable.o
+	ar -r filament.a hashtable.o
+
+%.o: %.c
+	$(CC) -c $< -o $@ -I../$(FILAMENT_INCLUDE) -I../$(QUANTA_INCLUDE) -D ENV_HOSTED
+
+clean:
+	rm -f *.o *.a

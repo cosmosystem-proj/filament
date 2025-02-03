@@ -11,3 +11,8 @@ export QUANTA_INCLUDE=.
 
 all: 
 	cd src && make all
+	ln -sf src/filament.a filament.a
+
+clean:
+	cd src && make clean
+	rm -f *.o *.a

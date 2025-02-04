@@ -12,7 +12,8 @@ export QUANTA_INCLUDE=.
 all: 
 	cd src && make all
 	ln -sf src/filament.a filament.a
+	ln -sf src/filament.so filament.so
 
 clean:
 	cd src && make clean
-	rm -f *.o *.a
+	rm -f *.o *.a *.so

@@ -8,13 +8,22 @@
 
 CC = gcc
 
-all: filament.a
+all: libs
+
+libs: shared-libs static-libs
+
+shared-libs: filament.so
+
+filament.so: hashtable.o
+	gcc $^ -shared -o $@
+
+static-libs: filament.a
 
 filament.a: hashtable.o
-	ar -r filament.a hashtable.o
+	ar -rcs $@ $^
 
 %.o: %.c
-	$(CC) -c $< -o $@ -I../$(FILAMENT_INCLUDE) -I../$(QUANTA_INCLUDE) -D ENV_HOSTED
+	$(CC) -c $< -fPIC -o $@ -I../$(FILAMENT_INCLUDE) -I../$(QUANTA_INCLUDE) -D ENV_HOSTED
 
 clean:
-	rm -f *.o *.a
+	rm -f *.o *.a *.so

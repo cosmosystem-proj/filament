@@ -31,4 +31,16 @@ typedef struct filament_hashtable {
   _filament_hashtable_entry contents[];
 } filament_hashtable;
 
+// we do this so we can test stuff in clang-repl without it complaining because
+// functions aren't name-mangled
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+filament_hash filament_hashtable_hash(void *key, size_t len);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

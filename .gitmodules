@@ -1,3 +1,6 @@
 [submodule "quanta"]
 	path = quanta
 	url = https://github.com/cosmosystem-proj/quanta.git
+[submodule "induction"]
+	path = induction
+	url = https://github.com/cosmosystem-proj/induction.git

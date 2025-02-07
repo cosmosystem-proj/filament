@@ -12,7 +12,7 @@ DEPS = ../filament.so
 all: test-hashtable.so
 
 test-hashtable.so: test-hashtable.o
-	$(CC) -shared -o $@ $^ -L ../src -l:filament.so
+	$(CC) -shared -o $@ $^ -L ../src -l:filament.a
 
 %.o: %.c
 	$(CC) -g -c $< -fPIC -o $@ -I../$(FILAMENT_INCLUDE) -I../$(QUANTA_INCLUDE) -D ENV_HOSTED

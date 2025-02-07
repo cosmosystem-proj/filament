@@ -46,9 +46,16 @@ filament_hash filament_hashtable_hash(void *key, size_t len) {
   const qword c1 = 16840508717339396339UL;
   const qword c2 = 11061967308696050939UL;
 
+  size_t padded_len = 0;
+
   // Copy the key into an internal buffer and pad it to a multiple of 8
   // bytes (64 bits)
-  size_t padded_len = len + (len % 8);
+  if ((len % 8) == 0) {
+    padded_len = len;
+  } else {
+    padded_len = len + (8 - (len % 8));
+  }
+
   byte *padded_key = malloc_wrapper(len + (len % 8));
 
   if (!padded_key) {

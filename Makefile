@@ -9,11 +9,19 @@
 export FILAMENT_INCLUDE=./include
 export QUANTA_INCLUDE=.
 
+.PHONY: test
+
 all: 
 	cd src && make all
+	cd induction && make all
 	ln -sf src/filament.a filament.a
 	ln -sf src/filament.so filament.so
 
+test:
+	cd test && make all
+
 clean:
 	cd src && make clean
+	cd induction && make clean
+	cd test && make clean
 	rm -f *.o *.a *.so

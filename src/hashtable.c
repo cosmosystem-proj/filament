@@ -1,5 +1,4 @@
-/*
- * Creator: Kurt M. Weber
+/* Creator: Kurt M. Weber
  * Created on: 2025-01-05
  *
  * This file is part of quanta, a component of the Cosmoverse.

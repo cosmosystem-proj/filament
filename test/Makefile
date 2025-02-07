@@ -1,5 +1,5 @@
 # Creator: Kurt M. Weber
-# Created on: 2025-01-05
+# Created on: 2025-02-06
 
 # This file is part of filament, a component of the Cosmoverse.
 # Licensed under Hippocratic License with clauses:
@@ -7,20 +7,12 @@
 # See file LICENSE for full licensing information.
 
 CC = gcc
+DEPS = ../filament.so
 
-all: libs
+all: test-hashtable.so
 
-libs: shared-libs static-libs
-
-shared-libs: filament.so
-
-filament.so: hashtable.o
-	gcc $^ -shared -o $@
-
-static-libs: filament.a
-
-filament.a: hashtable.o
-	ar -rcs $@ $^
+test-hashtable.so: test-hashtable.o
+	$(CC) -shared -o $@ $^ -L ../src -l:filament.so
 
 %.o: %.c
 	$(CC) -g -c $< -fPIC -o $@ -I../$(FILAMENT_INCLUDE) -I../$(QUANTA_INCLUDE) -D ENV_HOSTED

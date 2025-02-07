@@ -45,6 +45,7 @@ filament_hashtable *filament_hashtable_factory(uint64 size) {
 filament_hash filament_hashtable_hash(void *key, size_t len) {
   const qword c1 = 16840508717339396339UL;
   const qword c2 = 11061967308696050939UL;
+  const qword c3 = 16747499861120173679UL;
 
   size_t padded_len = 0;
 
@@ -72,8 +73,9 @@ filament_hash filament_hashtable_hash(void *key, size_t len) {
 
   filament_hash hash = c1;
 
-  for (uint64 i = 0; i < padded_len; i += 8) {
-    hash ^= (((qword *)padded_key)[i] ^= c2);
+  for (uint64 i = 0; i < padded_len; i++) {
+    hash *= c3;
+    hash ^= ((padded_key)[i] ^= c2);
   }
 
   return hash;

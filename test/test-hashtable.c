@@ -7,11 +7,18 @@
  * See file LICENSE for full licensing information.
  */
 
+#include <stdio.h>
 #include "../include/hashtable.h"
 #include "../induction/include/induction.h"
+#include "../quanta/include/types.h"
 
 bool test() {
-  filament_hashtable_hash(NULL, 1);
+  uint8 i = 0;
+  for (i = 0; i <= 5; i++) {
+    printf("Testing value %lli, hash = ", i);
+    printf("%llx\n", filament_hashtable_hash(&i, 1));
+  }
+
   return true;
 }
 

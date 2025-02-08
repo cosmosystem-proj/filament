@@ -23,7 +23,7 @@
 filament_hashtable *filament_hashtable_factory(uint64 size) {
   filament_hashtable *new =
       malloc_wrapper(sizeof(filament_hashtable) +
-                     ((size_t)size * sizeof(_filament_hashtable_entry)));
+                     ((size_t)size * sizeof(filament_hashtable_entry)));
 
   // Return NULL on error
   if (!new) {
@@ -40,6 +40,16 @@ filament_hashtable *filament_hashtable_factory(uint64 size) {
   }
 
   return new;
+}
+
+bool filament_hashtable_insert(filament_hashtable *table, void *key,
+                               size_t keylen, void *value, size_t valuelen) {
+  // ensure valid values
+  if (!table || !key || !value || !keylen || !valuelen) {
+    return false;
+  }
+
+  return true;
 }
 
 filament_hash filament_hashtable_hash(void *key, size_t len) {

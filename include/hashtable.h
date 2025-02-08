@@ -45,6 +45,7 @@ filament_hashtable_entry *filament_hashtable_entry_factory(void *key,
                                                            void *value,
                                                            uint64 value_len);
 filament_hash filament_hashtable_hash(void *key, size_t len);
+uint64 filament_hashtable_size(filament_hashtable *table);
 
 #ifdef __cplusplus
 }

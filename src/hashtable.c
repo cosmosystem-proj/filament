@@ -74,7 +74,17 @@ bool filament_hashtable_insert(filament_hashtable *table, void *key,
 
   filament_hash hash = filament_hashtable_hash(key, key_len);
 
+  uint64 bucket = hash / filament_hashtable_size(table);
+
   return true;
+}
+
+uint64 filament_hashtable_size(filament_hashtable *table) {
+  if (!table) {
+    return NULL;
+  }
+
+  return table->size;
 }
 
 filament_hash filament_hashtable_hash(void *key, size_t len) {

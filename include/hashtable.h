@@ -37,6 +37,7 @@ typedef struct filament_hashtable {
 extern "C" {
 #endif
 
+filament_hashtable *filament_hashtable_factory(uint64 size);
 filament_hash filament_hashtable_hash(void *key, size_t len);
 
 #ifdef __cplusplus

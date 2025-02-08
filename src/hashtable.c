@@ -42,12 +42,37 @@ filament_hashtable *filament_hashtable_factory(uint64 size) {
   return new;
 }
 
+filament_hashtable_entry *filament_hashtable_entry_factory(void *key,
+                                                           uint64 key_len,
+                                                           void *value,
+                                                           uint64 value_len) {
+  filament_hashtable_entry *entry =
+      malloc_wrapper(sizeof(filament_hashtable_entry));
+
+  if (!entry) {
+    return NULL;
+  }
+
+  entry->key = key;
+  entry->key_len = key_len;
+  entry->value = value;
+  entry->value_len = value_len;
+  entry->next = NULL;
+
+  return entry;
+}
+
 bool filament_hashtable_insert(filament_hashtable *table, void *key,
-                               size_t keylen, void *value, size_t valuelen) {
+                               size_t key_len, void *value, size_t value_len) {
   // ensure valid values
-  if (!table || !key || !value || !keylen || !valuelen) {
+  if (!table || !key || !value || !key_len || !value_len) {
     return false;
   }
+
+  filament_hashtable_entry *entry =
+      filament_hashtable_entry_factory(key, key_len, value, value_len);
+
+  filament_hash hash = filament_hashtable_hash(key, key_len);
 
   return true;
 }

@@ -105,8 +105,26 @@ bool test_entry_factory() {
   return true;
 }
 
+bool test_hashtable_size() {
+  filament_hashtable *table = filament_hashtable_factory(256);
+
+  if (!table) {
+    printf("\tTable creation failed\n");
+    return false;
+  }
+
+  if (filament_hashtable_size(table) != 256) {
+    printf("Hashtable size not a match, should be %lli but is %lli\n", 256,
+           table);
+    return false;
+  }
+
+  return true;
+}
+
 BEGIN_TEST_SET
 INDUCTION_TEST(test_hashing, "Test hashing")
 INDUCTION_TEST(test_hashtable_factory, "Hashtable factory test")
 INDUCTION_TEST(test_entry_factory, "Entry factory test")
+INDUCTION_TEST(test_hashtable_size, "Hashtable size retreival test")
 END_TEST_SET

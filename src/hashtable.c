@@ -81,7 +81,7 @@ bool filament_hashtable_insert(filament_hashtable *table, void *key,
 
 uint64 filament_hashtable_size(filament_hashtable *table) {
   if (!table) {
-    return NULL;
+    return 0;
   }
 
   return table->size;

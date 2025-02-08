@@ -92,7 +92,7 @@ filament_hash filament_hashtable_hash(void *key, size_t len) {
     padded_len = len + (8 - (len % 8));
   }
 
-  byte *padded_key = malloc_wrapper(len + (len % 8));
+  byte *padded_key = malloc_wrapper(padded_len);
 
   if (!padded_key) {
     return 0;

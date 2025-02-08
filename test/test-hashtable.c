@@ -20,6 +20,18 @@ bool test_hashing() {
     printf("%llx\n", filament_hashtable_hash(&i, 1));
   }
 
+  {
+    const char *key = "Liverpool club song";
+    printf("Testing value %s, hash = ", key);
+    printf("%llx\n", filament_hashtable_hash((void *)key, strlen(key) + 1));
+  }
+
+  {
+    const char *key = "You'll Never Walk Alone";
+    printf("Testing value %s, hash = ", key);
+    printf("%llx\n", filament_hashtable_hash((void *)key, strlen(key) + 1));
+  }
+
   return true;
 }
 

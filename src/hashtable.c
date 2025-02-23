@@ -23,7 +23,7 @@
 filament_hashtable *filament_hashtable_factory(uint64 size) {
   filament_hashtable *new =
       malloc_wrapper(sizeof(filament_hashtable) +
-                     ((size_t)size * sizeof(filament_hashtable_entry)));
+                     ((size_t)size * sizeof(filament_hashtable_entry *)));
 
   // Return NULL on error
   if (!new) {
@@ -34,9 +34,7 @@ filament_hashtable *filament_hashtable_factory(uint64 size) {
   new->version = 0;
 
   for (uint64 i = 0; i < size; i++) {
-    new->contents[i].key = NULL;
-    new->contents[i].value = NULL;
-    new->contents[i].next = NULL;
+    new->contents[i] = NULL;
   }
 
   return new;
@@ -57,7 +55,9 @@ filament_hashtable_entry *filament_hashtable_entry_factory(void *key,
   entry->key_len = key_len;
   entry->value = value;
   entry->value_len = value_len;
-  entry->next = NULL;
+  entry->hash = filament_hashtable_hash(key, key_len);
+  entry->left = NULL;
+  entry->right = NULL;
 
   return entry;
 }
@@ -72,9 +72,44 @@ bool filament_hashtable_insert(filament_hashtable *table, void *key,
   filament_hashtable_entry *entry =
       filament_hashtable_entry_factory(key, key_len, value, value_len);
 
+  if (!entry) {
+    return false;
+  }
+
   filament_hash hash = filament_hashtable_hash(key, key_len);
 
-  uint64 bucket = hash / filament_hashtable_size(table);
+  uint64 bucket = hash % filament_hashtable_size(table);
+
+  return filament_hashtable_bucket_put(table, bucket, entry, hash);
+}
+
+bool filament_hashtable_bucket_put(filament_hashtable *table, uint64 bucket,
+                                   filament_hashtable_entry *entry,
+                                   filament_hash hash) {
+
+  if (bucket > table->size) {
+    return false;
+  }
+
+  if (!table->contents) {
+    return false;
+  }
+
+  // walk the tree to find the appropriate location to insert
+  filament_hashtable_entry **current = &(table->contents[bucket]);
+
+  while (*current) {
+    if (hash < (*current)->hash) {
+      current = &((*current)->left);
+    } else if (hash > (*current)->hash) {
+      current = &((*current)->right);
+    } else {
+      // we've found an identical entry
+      return false;
+    }
+  }
+
+  *current = entry;
 
   return true;
 }

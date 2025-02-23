@@ -59,6 +59,14 @@ bool test_hashtable_factory() {
     return false;
   }
 
+  if (tbl->contents[0]) {
+    printf("\tcontents[0] not null\n");
+  }
+
+  if (tbl->contents[size - 1]) {
+    printf("\tcontents[%d] not null\n");
+  }
+
   return true;
 }
 
@@ -97,9 +105,13 @@ bool test_entry_factory() {
     return false;
   }
 
-  if (entry->next) {
-    printf("\tnext pointer not null\n");
+  if (entry->left) {
+    printf("\tleft pointer not null\n");
     return false;
+  }
+
+  if (entry->right) {
+    printf("\tright pointer not null\n");
   }
 
   return true;
@@ -122,9 +134,39 @@ bool test_hashtable_size() {
   return true;
 }
 
+bool test_insertion() {
+  filament_hashtable *table = filament_hashtable_factory(256);
+  const char *key = "Liverpool club song";
+  const char *value = "You'll Never Walk Alone";
+
+  if (!filament_hashtable_insert(table, (void *)key, sizeof(key), (void *)value,
+                                 sizeof(value))) {
+    printf("\tInsertion failed\n");
+    return false;
+  }
+
+  if (filament_hashtable_insert(table, (void *)key, sizeof(key), (void *)value,
+                                sizeof(value))) {
+    printf("\tDuplicate insertion succeeded, this should not happen\n");
+    return false;
+  }
+
+  const char *key2 = "Everton club song";
+  const char *value2 = "Forever Everton";
+
+  if (!filament_hashtable_insert(table, (void *)key2, sizeof(key2),
+                                 (void *)value2, sizeof(value2))) {
+    printf("\tSecond insertion failed\n");
+    return false;
+  }
+
+  return true;
+}
+
 BEGIN_TEST_SET
 INDUCTION_TEST(test_hashing, "Test hashing")
 INDUCTION_TEST(test_hashtable_factory, "Hashtable factory test")
 INDUCTION_TEST(test_entry_factory, "Entry factory test")
-INDUCTION_TEST(test_hashtable_size, "Hashtable size retreival test")
+INDUCTION_TEST(test_hashtable_size, "Hashtable size retrieval test")
+INDUCTION_TEST(test_insertion, "Insertion test")
 END_TEST_SET

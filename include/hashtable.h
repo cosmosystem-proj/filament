@@ -23,14 +23,16 @@ typedef struct filament_hashtable_entry {
   uint64 value_len;
   void *key;
   void *value;
-  filament_hashtable_entry *next;
+  filament_hash hash;
+  filament_hashtable_entry *left;
+  filament_hashtable_entry *right;
 } filament_hashtable_entry;
 
 typedef struct filament_hashtable {
   uint64 version;
   uint64 size;
   filament_hashtable_cmp_callback cmpfunc;
-  filament_hashtable_entry contents[];
+  filament_hashtable_entry *contents[];
 } filament_hashtable;
 
 // we do this so we can test stuff in clang-repl without it complaining because
@@ -46,6 +48,11 @@ filament_hashtable_entry *filament_hashtable_entry_factory(void *key,
                                                            uint64 value_len);
 filament_hash filament_hashtable_hash(void *key, size_t len);
 uint64 filament_hashtable_size(filament_hashtable *table);
+bool filament_hashtable_bucket_put(filament_hashtable *table, uint64 bucket,
+                                   filament_hashtable_entry *entry,
+                                   filament_hash hash);
+bool filament_hashtable_insert(filament_hashtable *table, void *key,
+                               size_t key_len, void *value, size_t value_len);
 
 #ifdef __cplusplus
 }

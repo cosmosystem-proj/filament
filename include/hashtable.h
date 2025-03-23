@@ -53,6 +53,8 @@ bool filament_hashtable_bucket_put(filament_hashtable *table, uint64 bucket,
                                    filament_hash hash);
 bool filament_hashtable_insert(filament_hashtable *table, void *key,
                                size_t key_len, void *value, size_t value_len);
+void *filament_hashtable_search(filament_hashtable *table, void *key,
+                                size_t key_len, size_t *value_len);
 
 #ifdef __cplusplus
 }

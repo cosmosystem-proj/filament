@@ -20,6 +20,11 @@
  * Must be destroyed with filament_hashtable_destroy()
  */
 
+uint64 filament_hashtable_bucket_calc(filament_hash hash,
+                                      filament_hashtable *table) {
+  return hash % filament_hashtable_size(table);
+}
+
 filament_hashtable *filament_hashtable_factory(uint64 size) {
   filament_hashtable *new =
       malloc_wrapper(sizeof(filament_hashtable) +
@@ -78,7 +83,7 @@ bool filament_hashtable_insert(filament_hashtable *table, void *key,
 
   filament_hash hash = filament_hashtable_hash(key, key_len);
 
-  uint64 bucket = hash % filament_hashtable_size(table);
+  uint64 bucket = filament_hashtable_bucket_calc(hash, table);
 
   return filament_hashtable_bucket_put(table, bucket, entry, hash);
 }
@@ -120,6 +125,12 @@ uint64 filament_hashtable_size(filament_hashtable *table) {
   }
 
   return table->size;
+}
+
+void *filament_hashtable_search(filament_hashtable *table, void *key,
+                                size_t key_len, size_t *value_len) {
+  // value_len can be null if the caller does not need to know the length
+  // return null if not found
 }
 
 filament_hash filament_hashtable_hash(void *key, size_t len) {

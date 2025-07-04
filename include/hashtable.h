@@ -30,7 +30,7 @@ typedef struct filament_hashtable_entry {
 
 typedef struct filament_hashtable {
   uint64 version;
-  uint64 size;
+  uint64 size; // size is 1-based, so max index of bucket is size-1!
   filament_hashtable_cmp_callback cmpfunc;
   filament_hashtable_entry *contents[];
 } filament_hashtable;

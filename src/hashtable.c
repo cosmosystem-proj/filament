@@ -7,9 +7,9 @@
  * See file LICENSE for full licensing information.
  */
 
+#include <include/hashtable.h>
 #include <quanta/include/platform.h>
 #include <quanta/include/types.h>
-#include <include/hashtable.h>
 
 /*
  * filament_hashtable *filament_hashtable_factory(uint64 size)
@@ -92,7 +92,7 @@ bool filament_hashtable_bucket_put(filament_hashtable *table, uint64 bucket,
                                    filament_hashtable_entry *entry,
                                    filament_hash hash) {
 
-  if (bucket > table->size) {
+  if (bucket > table->size - 1) {
     return false;
   }
 
@@ -131,6 +131,10 @@ void *filament_hashtable_search(filament_hashtable *table, void *key,
                                 size_t key_len, size_t *value_len) {
   // value_len can be null if the caller does not need to know the length
   // return null if not found
+
+  filament_hash hash = filament_hashtable_hash(key, key_len);
+
+  uint64 bucket = filament_hashtable_bucket_calc(hash, table);
 }
 
 filament_hash filament_hashtable_hash(void *key, size_t len) {

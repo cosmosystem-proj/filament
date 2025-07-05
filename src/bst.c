@@ -12,3 +12,17 @@
 #include <include/bst.h>
 #include <quanta/include/platform.h>
 #include <quanta/include/types.h>
+
+filament_bst filament_bst_factory() {
+  filament_bst_raw *new =
+      (filament_bst_raw *)malloc_wrapper(sizeof(filament_bst_raw));
+
+  // return NULL on error
+  if (!new) {
+    return (filament_bst)NULL;
+  }
+
+  new->root = (filament_bst_node *)NULL;
+
+  return new;
+}

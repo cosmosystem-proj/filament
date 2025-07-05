@@ -7,6 +7,8 @@
  * See file LICENSE for full licensing information.
  */
 
+#define _FILAMENT_BST_C
+
 #include <include/bst.h>
 #include <quanta/include/platform.h>
 #include <quanta/include/types.h>

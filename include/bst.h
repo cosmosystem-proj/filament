@@ -11,4 +11,26 @@
 #ifndef _FILAMENT_BST_H
 #define _FILAMENT_BST_H
 
+#include <quanta/include/types.h>
+
+#ifdef _FILAMENT_BST_C
+
+typedef struct filament_bst_node filament_bst_node;
+
+typedef struct filament_bst_node {
+  uint64 key_len;
+  uint64 val_len;
+  void *key;
+  void *val;
+
+  filament_bst_node *left;
+  filament_bst_node *right;
+};
+
+typedef struct filament_bst_raw {
+  filament_bst_node *root;
+};
+
+#endif
+
 #endif

@@ -15,8 +15,8 @@
 
 typedef struct filament_bst_node filament_bst_node;
 typedef struct filament_bst_node {
-  uint64 key_len;
-  uint64 val_len;
+  size_t key_len;
+  size_t val_len;
   void *key;
   void *val;
 
@@ -27,6 +27,12 @@ typedef struct filament_bst_node {
 typedef struct filament_bst_raw {
   filament_bst_node *root;
 } filament_bst_raw;
+
+typedef enum filament_bst_comparison {
+  FILAMENT_BST_LESSTHAN,
+  FILAMENT_BST_EQUAL,
+  FILAMENT_BST_GREATERTHAN
+} filament_bst_comparison;
 
 typedef filament_bst_raw *filament_bst;
 

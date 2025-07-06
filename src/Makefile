@@ -14,12 +14,12 @@ libs: shared-libs static-libs
 
 shared-libs: filament.so
 
-filament.so: hashtable.o
+filament.so: hashtable.o bst.o
 	gcc $^ -shared -o $@
 
 static-libs: filament.a
 
-filament.a: hashtable.o
+filament.a: hashtable.o bst.o
 	ar -rcs $@ $^
 
 %.o: %.c

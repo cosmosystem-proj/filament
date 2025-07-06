@@ -12,6 +12,8 @@
 #define _FILAMENT_BST_H
 
 #include <quanta/include/types.h>
+
+typedef struct filament_bst_node filament_bst_node;
 typedef struct filament_bst_node {
   uint64 key_len;
   uint64 val_len;

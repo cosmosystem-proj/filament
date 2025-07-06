@@ -17,7 +17,7 @@ all:
 	ln -sf src/filament.a filament.a
 	ln -sf src/filament.so filament.so
 
-test:
+test: all
 	cd test && make all
 
 clean:

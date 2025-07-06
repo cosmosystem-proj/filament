@@ -12,3 +12,17 @@
 #include "../quanta/include/types.h"
 #include <stdio.h>
 #include <string.h>
+
+bool test_bst_factory() {
+  filament_bst bst = filament_bst_factory();
+
+  if (!bst) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+BEGIN_TEST_SET
+INDUCTION_TEST(test_bst_factory, "Test BST factory")
+END_TEST_SET

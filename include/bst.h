@@ -30,4 +30,6 @@ typedef struct filament_bst_raw {
 
 typedef filament_bst_raw *filament_bst;
 
+filament_bst filament_bst_factory();
+
 #endif

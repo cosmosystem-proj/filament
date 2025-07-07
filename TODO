@@ -1,0 +1,1 @@
+2025-07-06: Make the comparison function for bst produce the same result on big-endian and little-endian systems

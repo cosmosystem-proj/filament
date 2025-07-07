@@ -38,4 +38,9 @@ typedef filament_bst_raw *filament_bst;
 
 filament_bst filament_bst_factory();
 
+#ifdef _FILAMENT_BST_C
+filament_bst_comparison filament_bst_compare(void *v1, size_t v1_len, void *v2,
+                                             size_t v2_len);
+#endif
+
 #endif

@@ -7,6 +7,9 @@
  * See file LICENSE for full licensing information.
  */
 
+#define _FILAMENT_BST_C
+#define _FILAMENT_BST_TEST_C
+
 #include "../include/bst.h"
 #include "../induction/include/induction.h"
 #include "../quanta/include/types.h"
@@ -23,6 +26,63 @@ bool test_bst_factory() {
   }
 }
 
+const char *test_bst_comparison_to_text(filament_bst_comparison val) {
+  switch (val) {
+  case FILAMENT_BST_EQUAL:
+    return "EQUAL";
+  case FILAMENT_BST_GREATERTHAN:
+    return "GREATERTHAN";
+  case FILAMENT_BST_LESSTHAN:
+    return "LESSTHAN";
+  }
+}
+
+bool test_bst_compare() {
+  filament_bst_comparison result;
+
+  {
+    uint8 a = 1, b = 2;
+    printf("One byte values, v1 = %hhd, v2 = %hhd, should return LESSTHAN...",
+           a, b);
+
+    result = filament_bst_compare(&a, sizeof(a), &b, sizeof(b));
+
+    printf("%s\n", test_bst_comparison_to_text(result));
+    if (result != FILAMENT_BST_LESSTHAN) {
+      return false;
+    }
+  }
+
+  {
+    uint8 a = 2, b = 1;
+    printf(
+        "One byte values, v1 = %hhd, v2 = %hhd, should return GREATERTHAN...",
+        a, b);
+
+    result = filament_bst_compare(&a, sizeof(a), &b, sizeof(b));
+
+    printf("%s\n", test_bst_comparison_to_text(result));
+    if (result != FILAMENT_BST_GREATERTHAN) {
+      return false;
+    }
+  }
+
+  {
+    uint8 a = 2, b = 2;
+    printf("One byte values, v1 = %hhd, v2 = %hhd, should return EQUAL...", a,
+           b);
+
+    result = filament_bst_compare(&a, sizeof(a), &b, sizeof(b));
+
+    printf("%s\n", test_bst_comparison_to_text(result));
+    if (result != FILAMENT_BST_EQUAL) {
+      return false;
+    }
+  }
+  return true;
+}
+
 BEGIN_TEST_SET
 INDUCTION_TEST(test_bst_factory, "Test BST factory")
+INDUCTION_TEST(test_bst_compare, "Test BST comparison")
 END_TEST_SET

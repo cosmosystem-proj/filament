@@ -12,12 +12,48 @@
 #include <include/bst.h>
 #include <quanta/include/platform.h>
 #include <quanta/include/types.h>
+#include <quanta/include/util.h>
 
 filament_bst_comparison filament_bst_compare(void *v1, size_t v1_len, void *v2,
                                              size_t v2_len);
 
 filament_bst_comparison filament_bst_compare(void *v1, size_t v1_len, void *v2,
-                                             size_t v2_len) {}
+                                             size_t v2_len) {
+  // Return FILAMENT_BST_GREATERTHAN if v1 > v2, FILAMENT_BST_EQUAL if v1 = v2,
+  // FILAMENT_BST_LESSTHAN if v1 < v2
+
+  // Pay careful attention to how this is explained, on little-endian systems
+  // it may produce counterintuitive results.  Because it works from lowest to
+  // highest address doing byte-byte comparisons, it won't necessarily give the
+  // same result as a straightforward numerical comparison would.
+
+  size_t shortest = MIN((v1_len), (v2_len));
+
+  // byte-by-byte comparison of the two values presented to us
+
+  for (size_t i = 0; i < shortest; i++) {
+    if (((byte *)v1)[i] > ((byte *)v2)[i]) {
+      return FILAMENT_BST_GREATERTHAN;
+    } else if (((byte *)v1)[i] < ((byte *)v2)[i]) {
+      return FILAMENT_BST_LESSTHAN;
+    }
+  }
+
+  // if we've gotten to this point, then if the two values are of the same
+  // length then they're also equal
+  if (v1_len == v2_len) {
+    return FILAMENT_BST_EQUAL;
+  }
+
+  // If their lengths are unequal, but their values from 0...shortest bytewise
+  // are equal, then we report the longer one as the greater--so if v1 is longer
+  // than v2, return >, otherwise return <
+  if (v1_len > v2_len) {
+    return FILAMENT_BST_LESSTHAN;
+  } else {
+    return FILAMENT_BST_LESSTHAN;
+  }
+}
 
 filament_bst filament_bst_factory() {
   filament_bst_raw *new =

@@ -80,18 +80,11 @@ bool filament_bst_insert(filament_bst bst, void *key, size_t key_len, void *val,
   }
 
   filament_bst_node *new =
-      (filament_bst_node *)malloc_wrapper(sizeof(filament_bst_node));
+      filament_bst_node_factory(key, key_len, val, val_len);
 
   if (!new) {
     return false;
   }
-
-  new->key = key;
-  new->key_len = key_len;
-  new->val = val;
-  new->val_len = val_len;
-  new->left = NULL;
-  new->right = NULL;
 
   filament_bst_node *cur = bst->root;
   if (!cur) {
@@ -131,4 +124,20 @@ bool filament_bst_insert(filament_bst bst, void *key, size_t key_len, void *val,
   }
 
   return true;
+}
+
+filament_bst_node *filament_bst_node_factory(void *key, size_t key_len,
+                                             void *val, size_t val_len) {
+  filament_bst_node *node = malloc_wrapper(sizeof(filament_bst_node));
+
+  if (!node) {
+    return NULL;
+  }
+
+  node->key = key;
+  node->key_len = key_len;
+  node->val = val;
+  node->val_len = val_len;
+  node->left = NULL;
+  node->right = NULL;
 }

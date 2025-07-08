@@ -41,6 +41,8 @@ filament_bst filament_bst_factory();
 #ifdef _FILAMENT_BST_C
 filament_bst_comparison filament_bst_compare(void *v1, size_t v1_len, void *v2,
                                              size_t v2_len);
+filament_bst_node *filament_bst_node_factory(void *key, size_t key_len,
+                                             void *val, size_t val_len);
 #endif
 
 #endif

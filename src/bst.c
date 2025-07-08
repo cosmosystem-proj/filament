@@ -49,7 +49,7 @@ filament_bst_comparison filament_bst_compare(void *v1, size_t v1_len, void *v2,
   // are equal, then we report the longer one as the greater--so if v1 is longer
   // than v2, return >, otherwise return <
   if (v1_len > v2_len) {
-    return FILAMENT_BST_LESSTHAN;
+    return FILAMENT_BST_GREATERTHAN;
   } else {
     return FILAMENT_BST_LESSTHAN;
   }

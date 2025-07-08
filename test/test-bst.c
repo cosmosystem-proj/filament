@@ -79,6 +79,74 @@ bool test_bst_compare() {
       return false;
     }
   }
+
+  {
+    uint16 a = 0x394A, b = 0x21D5;
+    printf("Two byte values, v1 = %hd, v2 = %hd, should return LESSTHAN...", a,
+           b);
+
+    result = filament_bst_compare(&a, sizeof(a), &b, sizeof(b));
+
+    printf("%s\n", test_bst_comparison_to_text(result));
+    if (result != FILAMENT_BST_LESSTHAN) {
+      return false;
+    }
+  }
+
+  {
+    uint16 a = 0x21D5, b = 0x394A;
+    printf("Two byte values, v1 = %hd, v2 = %hd, should return GREATERTHAN...",
+           a, b);
+
+    result = filament_bst_compare(&a, sizeof(a), &b, sizeof(b));
+
+    printf("%s\n", test_bst_comparison_to_text(result));
+    if (result != FILAMENT_BST_GREATERTHAN) {
+      return false;
+    }
+  }
+
+  {
+    uint16 a = 0x21D5, b = 0x21D5;
+    printf("Two byte values, v1 = %hd, v2 = %hd, should return EQUAL...", a, b);
+
+    result = filament_bst_compare(&a, sizeof(a), &b, sizeof(b));
+
+    printf("%s\n", test_bst_comparison_to_text(result));
+    if (result != FILAMENT_BST_EQUAL) {
+      return false;
+    }
+  }
+
+  {
+    uint32 a = 0x21D5C38B;
+    uint16 b = 0xC38B;
+    printf("Four vs. two byte values, v1 = %d, v2 = %hd, should return "
+           "GREATERTHAN...",
+           a, b);
+
+    result = filament_bst_compare(&a, sizeof(a), &b, sizeof(b));
+
+    printf("%s\n", test_bst_comparison_to_text(result));
+    if (result != FILAMENT_BST_GREATERTHAN) {
+      return false;
+    }
+  }
+
+  {
+    uint16 a = 0xC38B;
+    uint32 b = 0x21D5C38B;
+    printf("Two vs. four byte values, v1 = %hd, v2 = %d, should return "
+           "LESSTHAN...",
+           a, b);
+
+    result = filament_bst_compare(&a, sizeof(a), &b, sizeof(b));
+
+    printf("%s\n", test_bst_comparison_to_text(result));
+    if (result != FILAMENT_BST_LESSTHAN) {
+      return false;
+    }
+  }
   return true;
 }
 

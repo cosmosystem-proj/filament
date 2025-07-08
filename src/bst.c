@@ -140,4 +140,6 @@ filament_bst_node *filament_bst_node_factory(void *key, size_t key_len,
   node->val_len = val_len;
   node->left = NULL;
   node->right = NULL;
+
+  return node;
 }

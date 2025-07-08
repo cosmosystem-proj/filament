@@ -150,7 +150,28 @@ bool test_bst_compare() {
   return true;
 }
 
+bool test_bst_node_factory() {
+  uint8 key = 65;
+  uint64 val = 32532531;
+
+  filament_bst_node *node =
+      filament_bst_node_factory(&key, sizeof(key), &val, sizeof(val));
+
+  INDUCTION_SUBTEST("Node creation", node)
+  INDUCTION_SUBTEST("Key assigned properly", (node->key == &key))
+  INDUCTION_SUBTEST("Key length assigned properly",
+                    (node->key_len == sizeof(key)))
+  INDUCTION_SUBTEST("Value assigned properly", (node->val == &val))
+  INDUCTION_SUBTEST("Value length assigned properly",
+                    (node->val_len == sizeof(val)))
+  INDUCTION_SUBTEST("Left branch NULL", (!node->left))
+  INDUCTION_SUBTEST("Right branch NULL", (!node->right))
+
+  return true;
+}
+
 BEGIN_TEST_SET
 INDUCTION_TEST(test_bst_factory, "Test BST factory")
 INDUCTION_TEST(test_bst_compare, "Test BST comparison")
+INDUCTION_TEST(test_bst_node_factory, "Test BST node factory")
 END_TEST_SET

@@ -100,6 +100,34 @@ bool filament_bst_insert(filament_bst bst, void *key, size_t key_len, void *val,
   }
 
   while (cur) {
+    filament_bst_node *next;
+    filament_bst_comparison cmp =
+        filament_bst_compare(cur->key, cur->key_len, key, key_len);
+
+    if (cmp == FILAMENT_BST_EQUAL) {
+      free_wrapper(new);
+      return false;
+    }
+
+    if (cmp == FILAMENT_BST_GREATERTHAN) {
+      if (!cur->right) {
+        cur->right = new;
+        break;
+      } else {
+        cur = cur->right;
+        continue;
+      }
+    }
+
+    if (cmp == FILAMENT_BST_LESSTHAN) {
+      if (!cur->left) {
+        cur->left = new;
+        break;
+      } else {
+        cur = cur->left;
+        continue;
+      }
+    }
   }
 
   return true;

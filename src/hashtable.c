@@ -173,5 +173,7 @@ filament_hash filament_hashtable_hash(void *key, size_t len) {
     hash ^= ((padded_key)[i] ^= c2);
   }
 
+  free_wrapper(padded_key);
+
   return hash;
 }

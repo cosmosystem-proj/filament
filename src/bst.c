@@ -79,10 +79,6 @@ bool filament_bst_insert(filament_bst bst, void *key, size_t key_len, void *val,
     return false;
   }
 
-  if (!new) {
-    return false;
-  }
-
   filament_bst_node *cur = bst->root;
   filament_bst_node **curptr = &(bst->root);
 
@@ -107,6 +103,9 @@ bool filament_bst_insert(filament_bst bst, void *key, size_t key_len, void *val,
 
   filament_bst_node *new =
       filament_bst_node_factory(key, key_len, val, val_len);
+  if (!new) {
+    return false;
+  }
   *curptr = new;
 
   return true;

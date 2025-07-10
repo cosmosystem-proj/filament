@@ -79,49 +79,35 @@ bool filament_bst_insert(filament_bst bst, void *key, size_t key_len, void *val,
     return false;
   }
 
-  filament_bst_node *new =
-      filament_bst_node_factory(key, key_len, val, val_len);
-
   if (!new) {
     return false;
   }
 
   filament_bst_node *cur = bst->root;
-  if (!cur) {
-    bst->root = new;
-    return true;
-  }
+  filament_bst_node **curptr = &(bst->root);
 
   while (cur) {
-    filament_bst_node *next;
+    filament_bst_node *next = NULL;
     filament_bst_comparison cmp =
         filament_bst_compare(cur->key, cur->key_len, key, key_len);
 
-    if (cmp == FILAMENT_BST_EQUAL) {
-      free_wrapper(new);
+    switch (cmp) {
+    case FILAMENT_BST_EQUAL:
       return false;
-    }
-
-    if (cmp == FILAMENT_BST_GREATERTHAN) {
-      if (!cur->right) {
-        cur->right = new;
-        break;
-      } else {
-        cur = cur->right;
-        continue;
-      }
-    }
-
-    if (cmp == FILAMENT_BST_LESSTHAN) {
-      if (!cur->left) {
-        cur->left = new;
-        break;
-      } else {
-        cur = cur->left;
-        continue;
-      }
+    case FILAMENT_BST_GREATERTHAN:
+      curptr = &(cur->right);
+      cur = cur->right;
+      break;
+    case FILAMENT_BST_LESSTHAN:
+      curptr = &(cur->left);
+      cur = cur->left;
+      break;
     }
   }
+
+  filament_bst_node *new =
+      filament_bst_node_factory(key, key_len, val, val_len);
+  *curptr = new;
 
   return true;
 }

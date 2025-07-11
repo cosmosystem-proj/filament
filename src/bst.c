@@ -85,7 +85,7 @@ bool filament_bst_insert(filament_bst bst, void *key, size_t key_len, void *val,
   while (cur) {
     filament_bst_node *next = NULL;
     filament_bst_comparison cmp =
-        filament_bst_compare(cur->key, cur->key_len, key, key_len);
+        filament_bst_compare(key, key_len, cur->key, cur->key_len);
 
     switch (cmp) {
     case FILAMENT_BST_EQUAL:

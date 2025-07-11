@@ -37,6 +37,8 @@ typedef enum filament_bst_comparison {
 typedef filament_bst_raw *filament_bst;
 
 filament_bst filament_bst_factory();
+bool filament_bst_insert(filament_bst bst, void *key, size_t key_len, void *val,
+                         size_t val_len);
 
 #ifdef _FILAMENT_BST_C
 filament_bst_comparison filament_bst_compare(void *v1, size_t v1_len, void *v2,

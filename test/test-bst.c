@@ -170,8 +170,52 @@ bool test_bst_node_factory() {
   return true;
 }
 
+bool test_bst_insert() {
+  uint8 key_1 = 5;
+  uint16 val_1 = 2332;
+
+  filament_bst bst = filament_bst_factory();
+
+  INDUCTION_SUBTEST(
+      "Insert key 1",
+      (filament_bst_insert(bst, &key_1, sizeof(key_1), &val_1, sizeof(val_1))))
+
+  uint8 key_2 = 7;
+  uint16 val_2 = 69;
+
+  INDUCTION_SUBTEST(
+      "Insert key 2",
+      (filament_bst_insert(bst, &key_2, sizeof(key_2), &val_2, sizeof(val_2))))
+
+  uint8 key_3 = 7;
+  uint16 val_3 = 70;
+
+  INDUCTION_SUBTEST("Insert key 3",
+                    (!filament_bst_insert(
+                        bst, &key_3, sizeof(key_3), &val_3,
+                        sizeof(val_3)))) // note the negative--this call should
+                                         // return false due to a duplicate key
+
+  uint8 key_4 = 3;
+  uint16 val_4 = 70;
+
+  INDUCTION_SUBTEST(
+      "Insert key 4",
+      (filament_bst_insert(bst, &key_4, sizeof(key_4), &val_4, sizeof(val_4))))
+
+  uint8 key_5 = 18;
+  uint16 val_5 = 44;
+
+  INDUCTION_SUBTEST(
+      "Insert key 5",
+      (filament_bst_insert(bst, &key_5, sizeof(key_5), &val_5, sizeof(val_5))))
+
+  return true;
+}
+
 BEGIN_TEST_SET
 INDUCTION_TEST(test_bst_factory, "Test BST factory")
 INDUCTION_TEST(test_bst_compare, "Test BST comparison")
 INDUCTION_TEST(test_bst_node_factory, "Test BST node factory")
+INDUCTION_TEST(test_bst_insert, "Test BST insert")
 END_TEST_SET

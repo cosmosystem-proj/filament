@@ -16,6 +16,9 @@
 #include <stdio.h>
 #include <string.h>
 
+uint8 test_keys[] = {5, 7, 8, 10};
+uint16 test_vals[] = {2332, 60, 70, 44};
+
 bool test_bst_factory() {
   filament_bst bst = filament_bst_factory();
 
@@ -171,44 +174,50 @@ bool test_bst_node_factory() {
 }
 
 bool test_bst_insert() {
-  uint8 key_1 = 5;
-  uint16 val_1 = 2332;
 
   filament_bst bst = filament_bst_factory();
 
   INDUCTION_SUBTEST(
       "Insert key 1",
-      (filament_bst_insert(bst, &key_1, sizeof(key_1), &val_1, sizeof(val_1))))
-
-  uint8 key_2 = 7;
-  uint16 val_2 = 69;
+      (filament_bst_insert(bst, &test_keys[0], sizeof(test_keys[0]),
+                           &test_vals[0], sizeof(test_vals[0]))))
 
   INDUCTION_SUBTEST(
       "Insert key 2",
-      (filament_bst_insert(bst, &key_2, sizeof(key_2), &val_2, sizeof(val_2))))
+      (filament_bst_insert(bst, &test_keys[1], sizeof(test_keys[1]),
+                           &test_vals[1], sizeof(test_vals[1]))))
 
-  uint8 key_3 = 7;
-  uint16 val_3 = 70;
-
-  INDUCTION_SUBTEST("Insert key 3",
-                    (!filament_bst_insert(
-                        bst, &key_3, sizeof(key_3), &val_3,
-                        sizeof(val_3)))) // note the negative--this call should
-                                         // return false due to a duplicate key
-
-  uint8 key_4 = 3;
-  uint16 val_4 = 70;
+  INDUCTION_SUBTEST(
+      "Insert key 3",
+      (filament_bst_insert(bst, &test_keys[2], sizeof(test_keys[2]),
+                           &test_vals[2], sizeof(test_vals[2]))))
 
   INDUCTION_SUBTEST(
       "Insert key 4",
-      (filament_bst_insert(bst, &key_4, sizeof(key_4), &val_4, sizeof(val_4))))
-
-  uint8 key_5 = 18;
-  uint16 val_5 = 44;
+      (filament_bst_insert(bst, &test_keys[3], sizeof(test_keys[3]),
+                           &test_vals[3], sizeof(test_vals[3]))))
 
   INDUCTION_SUBTEST(
-      "Insert key 5",
-      (filament_bst_insert(bst, &key_5, sizeof(key_5), &val_5, sizeof(val_5))))
+      "Re-inserting key 1: should not be possible",
+      (!filament_bst_insert(
+          bst, &test_keys[0], sizeof(test_keys[0]), &test_vals[0],
+          sizeof(test_vals[0])))) // note the negative--this call should
+                                  // return false due to a duplicate key
+
+  INDUCTION_SUBTEST(
+      "Re-inserting key 2: should not be possible",
+      (!filament_bst_insert(bst, &test_keys[1], sizeof(test_keys[1]),
+                            &test_vals[1], sizeof(test_vals[1]))))
+
+  INDUCTION_SUBTEST(
+      "Re-inserting key 3: should not be possible",
+      (!filament_bst_insert(bst, &test_keys[2], sizeof(test_keys[2]),
+                            &test_vals[2], sizeof(test_vals[2]))))
+
+  INDUCTION_SUBTEST(
+      "Re-inserting key 4: should not be possible",
+      (!filament_bst_insert(bst, &test_keys[3], sizeof(test_keys[3]),
+                            &test_vals[3], sizeof(test_vals[3]))))
 
   return true;
 }

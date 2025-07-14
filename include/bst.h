@@ -42,6 +42,7 @@ typedef struct filament_bst_result {
 typedef filament_bst_raw *filament_bst;
 
 filament_bst filament_bst_factory();
+filament_bst_result filament_bst_find(filament_bst bst, void *key, size_t len);
 bool filament_bst_insert(filament_bst bst, void *key, size_t key_len, void *val,
                          size_t val_len);
 

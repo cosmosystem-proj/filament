@@ -16,8 +16,8 @@
 #include <stdio.h>
 #include <string.h>
 
-uint8 test_keys[] = {5, 7, 8, 10};
-uint16 test_vals[] = {2332, 60, 70, 44};
+uint8 test_keys[] = {5, 7, 8, 10, 3, 45, 9, 28};
+uint16 test_vals[] = {2332, 60, 70, 44, 12993, 42, 593, 1003};
 
 bool test_bst_factory() {
   filament_bst bst = filament_bst_factory();
@@ -222,9 +222,36 @@ bool test_bst_insert() {
   return true;
 }
 
+bool test_bst_find() {
+  size_t count = sizeof(test_keys) / sizeof(test_keys[0]);
+
+  filament_bst bst = filament_bst_factory();
+
+  if (!bst) {
+    return false;
+  }
+
+  for (uint8 i = 0; i < count; i++) {
+    filament_bst_insert(bst, &test_keys[i], sizeof(test_keys[i]), &test_vals[i],
+                        sizeof(test_vals[i]));
+  }
+
+  for (uint8 i = 0; i < count; i++) {
+    printf("Looking for key %hhu, should be %hu, is ", test_keys[i],
+           test_vals[i]);
+    uint16 *val =
+        (uint16 *)(filament_bst_find(bst, &test_keys[i], sizeof(test_keys[i]))
+                       .val);
+    printf("%hu", *val);
+    INDUCTION_SUBTEST("", (*val == test_vals[i]))
+  }
+  return true;
+}
+
 BEGIN_TEST_SET
 INDUCTION_TEST(test_bst_factory, "Test BST factory")
 INDUCTION_TEST(test_bst_compare, "Test BST comparison")
 INDUCTION_TEST(test_bst_node_factory, "Test BST node factory")
 INDUCTION_TEST(test_bst_insert, "Test BST insert")
+INDUCTION_TEST(test_bst_find, "Test BST find")
 END_TEST_SET

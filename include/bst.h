@@ -34,6 +34,11 @@ typedef enum filament_bst_comparison {
   FILAMENT_BST_GREATERTHAN
 } filament_bst_comparison;
 
+typedef struct filament_bst_result {
+  void *val;
+  size_t len;
+} filament_bst_result;
+
 typedef filament_bst_raw *filament_bst;
 
 filament_bst filament_bst_factory();

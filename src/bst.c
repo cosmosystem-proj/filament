@@ -69,6 +69,37 @@ filament_bst filament_bst_factory() {
   return new;
 }
 
+filament_bst_result filament_bst_find(filament_bst bst, void *key, size_t len) {
+  filament_bst_result res = {.val = 0, .len = 00};
+  filament_bst_node *cur = NULL;
+
+  if (!bst) {
+    return res;
+  }
+
+  cur = bst->root;
+
+  while (cur) {
+    filament_bst_comparison cmp =
+        filament_bst_compare(key, len, cur->key, cur->key_len);
+
+    switch (cmp) {
+    case FILAMENT_BST_EQUAL:
+      res.val = cur->val;
+      res.len = cur->val_len;
+      return res;
+    case FILAMENT_BST_LESSTHAN:
+      cur = cur->left;
+      break;
+    case FILAMENT_BST_GREATERTHAN:
+      cur = cur->right;
+      break;
+    }
+  }
+
+  return res;
+}
+
 bool filament_bst_insert(filament_bst bst, void *key, size_t key_len, void *val,
                          size_t val_len) {
 

@@ -35,8 +35,10 @@ typedef enum filament_bst_comparison {
 } filament_bst_comparison;
 
 typedef struct filament_bst_result {
+  void *key;
+  size_t key_len;
   void *val;
-  size_t len;
+  size_t val_len;
 } filament_bst_result;
 
 typedef filament_bst_raw *filament_bst;

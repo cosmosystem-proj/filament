@@ -70,7 +70,7 @@ filament_bst filament_bst_factory() {
 }
 
 filament_bst_result filament_bst_find(filament_bst bst, void *key, size_t len) {
-  filament_bst_result res = {.val = 0, .len = 00};
+  filament_bst_result res = {.key = 0, .key_len = 0, .val = 0, .val_len = 0};
   filament_bst_node *cur = NULL;
 
   if (!bst) {
@@ -85,8 +85,10 @@ filament_bst_result filament_bst_find(filament_bst bst, void *key, size_t len) {
 
     switch (cmp) {
     case FILAMENT_BST_EQUAL:
+      res.key = cur->key;
+      res.key_len = cur->key_len;
       res.val = cur->val;
-      res.len = cur->val_len;
+      res.val_len = cur->val_len;
       return res;
     case FILAMENT_BST_LESSTHAN:
       cur = cur->left;

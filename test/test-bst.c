@@ -311,6 +311,31 @@ bool test_bst_remove() {
     }
   }
 
+  {
+    filament_bst bst = filament_bst_factory();
+
+    if (!bst) {
+      return false;
+    }
+
+    for (uint8 j = 0; j < count; j++) {
+      filament_bst_insert(bst, &test_keys[j], sizeof(test_keys[j]),
+                          &test_vals[j], sizeof(test_vals[j]));
+    }
+
+    uint8 nonexistent_key = 16;
+    printf("Removing nonexistent key %hhu, should fail...", nonexistent_key);
+
+    filament_bst_result res =
+        filament_bst_remove(bst, &nonexistent_key, sizeof(nonexistent_key));
+    if (res.key) {
+      printf("succeeded (which means the test failed)\n");
+      return false;
+    } else {
+      printf("failed (which means the test succeeded)\n");
+    }
+  }
+
   return true;
 }
 

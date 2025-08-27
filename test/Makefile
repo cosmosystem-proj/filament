@@ -17,7 +17,7 @@ test-bst: test-bst.so
 test-hashtable: test-hashtable.so
 	../induction/induction ./test-hashtable.so
 
-%.so: %.o
+%.so: %.o ../filament.a
 	$(CC) -shared -o $@ $^ -L ../src -l:filament.a
 
 %.o: %.c

@@ -47,6 +47,8 @@ filament_bst filament_bst_factory();
 filament_bst_result filament_bst_find(filament_bst bst, void *key, size_t len);
 bool filament_bst_insert(filament_bst bst, void *key, size_t key_len, void *val,
                          size_t val_len);
+filament_bst_result filament_bst_remove(filament_bst bst, void *key,
+                                        size_t key_len);
 
 #ifdef _FILAMENT_BST_C
 filament_bst_comparison filament_bst_compare(void *v1, size_t v1_len, void *v2,

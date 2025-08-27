@@ -161,3 +161,100 @@ filament_bst_node *filament_bst_node_factory(void *key, size_t key_len,
 
   return node;
 }
+
+filament_bst_result filament_bst_process_removal(filament_bst_node *cur,
+                                                 filament_bst_node **cur_ptr) {
+  filament_bst_node *next = NULL;
+  filament_bst_node *next_parent = NULL;
+  filament_bst_result res = {.key = 0, .key_len = 0, .val = 0, .val_len = 0};
+
+  // We return the key and value pointers that are being returned
+  res.key = cur->key;
+  res.key_len = cur->key_len;
+  res.val = cur->val;
+  res.val_len = cur->val_len;
+
+  if (!(cur->left) && !(cur->right)) {
+    (*cur_ptr) = NULL;
+    free_wrapper(cur);
+  } else if ((cur->left) && !(cur->right)) {
+    (*cur_ptr) = cur->left;
+    free_wrapper(cur);
+  } else if (!(cur->left) && (cur->right)) {
+    (*cur_ptr) = cur->right;
+    free_wrapper(cur);
+  } else { // if both cur->left and cur->right are occupied
+    next = cur->right;
+    next_parent = cur;
+
+    // find cur's in-order successor and store a pointer to it in next
+    while (next->left) {
+      next_parent = next;
+      next = next->left;
+    }
+
+    if (next == cur->right) {
+      // If the in-order successor is a direct child of cur (because it's the
+      // *successor* it will necessarily be the right-hand child in that case)
+      // then we simply replace cur with next, with next keeping its right-hand
+      // child and adopting cur's left-hand child.
+      next->left = cur->left;
+      *cur_ptr = next;
+    } else {
+      // Otherwise, we first replace next with its right-nad child...
+      next_parent->left = next->right;
+
+      // ...and then move next into the slot vacated by cur after adopting its
+      // children
+      next->left = cur->left;
+      next->right = cur->right;
+      *cur_ptr = next;
+    }
+
+    free_wrapper(cur);
+  }
+
+  return res;
+}
+
+filament_bst_result filament_bst_remove(filament_bst bst, void *key,
+                                        size_t key_len) {
+  filament_bst_result res = {.key = 0, .key_len = 0, .val = 0, .val_len = 0};
+
+  // The reason we return the key and value pointers of the value being removed
+  // is so that the caller can do deallocation and other maintenance tasks on
+  // them if necessary.  Otherwise, callers might not have access to the
+  // original pointers (especially the value pointers) because they might have
+  // been initially allocated on the heap from within another scope.
+
+  if (!bst) {
+    return res;
+  }
+
+  if (!key) {
+    return res;
+  }
+
+  filament_bst_node *cur = bst->root;
+  filament_bst_node **cur_ptr = &(bst->root);
+
+  if (!cur) {
+    return res;
+  }
+
+  while (cur) {
+    switch (filament_bst_compare(key, key_len, cur->key, cur->key_len)) {
+    case FILAMENT_BST_GREATERTHAN:
+      cur_ptr = &(cur->right);
+      cur = cur->right;
+      break;
+    case FILAMENT_BST_LESSTHAN:
+      cur_ptr = &(cur->left);
+      cur = cur->left;
+      break;
+    case FILAMENT_BST_EQUAL:
+      res = filament_bst_process_removal(cur, cur_ptr);
+      return res;
+    }
+  }
+}

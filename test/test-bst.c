@@ -248,10 +248,77 @@ bool test_bst_find() {
   return true;
 }
 
+bool test_bst_remove() {
+  size_t count = sizeof(test_keys) / sizeof(test_keys[0]);
+
+  for (uint8 i = 0; i < count; i++) {
+
+    filament_bst bst = filament_bst_factory();
+
+    if (!bst) {
+      return false;
+    }
+
+    for (uint8 j = 0; j < count; j++) {
+      filament_bst_insert(bst, &test_keys[j], sizeof(test_keys[j]),
+                          &test_vals[j], sizeof(test_vals[j]));
+    }
+
+    printf("Removing key %hhu, should be %hu, is ", test_keys[i], test_vals[i]);
+
+    filament_bst_result res =
+        filament_bst_remove(bst, &test_keys[i], sizeof(test_keys[i]));
+    printf("%hu\n", *(uint16 *)(res.val));
+    if (*(uint16 *)res.val != test_vals[i]) {
+      return false;
+    }
+
+    printf("\tChecking if removed...");
+    uint16 *val =
+        (uint16 *)(filament_bst_find(bst, &test_keys[i], sizeof(test_keys[i]))
+                       .val);
+
+    if (!val) {
+      printf("succesful!\n");
+    } else {
+      printf("failed\n");
+      return false;
+    }
+
+    for (uint8 j = 0; j < count; j++) {
+      if (j == i) {
+        printf("\tSkipping key %hhu\n", test_keys[j]);
+        continue; // don't look for the value we've removed
+      }
+
+      printf("\tFinding key %hhu...", test_keys[j]);
+      fflush(stdout);
+
+      uint16 *val =
+          (uint16 *)(filament_bst_find(bst, &test_keys[j], sizeof(test_keys[j]))
+                         .val);
+      if (!val) {
+        printf("failed, key not found\n");
+        return false;
+      }
+
+      if (*val == test_vals[j]) {
+        printf("successful!\n");
+      } else {
+        printf("failed, values don't match\n");
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
 BEGIN_TEST_SET
 INDUCTION_TEST(test_bst_factory, "Test BST factory")
 INDUCTION_TEST(test_bst_compare, "Test BST comparison")
 INDUCTION_TEST(test_bst_node_factory, "Test BST node factory")
 INDUCTION_TEST(test_bst_insert, "Test BST insert")
 INDUCTION_TEST(test_bst_find, "Test BST find")
+INDUCTION_TEST(test_bst_remove, "Test BST remove")
 END_TEST_SET

@@ -242,6 +242,7 @@ filament_bst_result filament_bst_remove(filament_bst bst, void *key,
     return res;
   }
 
+  // Walk the tree until we find the node to remove
   while (cur) {
     switch (filament_bst_compare(key, key_len, cur->key, cur->key_len)) {
     case FILAMENT_BST_GREATERTHAN:
@@ -257,4 +258,7 @@ filament_bst_result filament_bst_remove(filament_bst bst, void *key,
       return res;
     }
   }
+
+  // If we've gotten here then the requested key does not exist
+  return res;
 }

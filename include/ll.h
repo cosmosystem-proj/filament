@@ -25,4 +25,6 @@ struct filament_ll {
 
 typedef struct filament_ll *filament_ll;
 
+filament_ll filament_ll_factory();
+
 #endif

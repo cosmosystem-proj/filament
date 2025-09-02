@@ -9,13 +9,16 @@
 CC = gcc
 DEPS = ../filament.so
 
-all: test-hashtable test-bst
+all: test-hashtable test-bst test-ll
 
 test-bst: test-bst.so
 	../induction/induction ./test-bst.so
 
 test-hashtable: test-hashtable.so
 	../induction/induction ./test-hashtable.so
+
+test-ll: test-ll.so
+	../induction/induction ./test-ll.so
 
 %.so: %.o ../filament.a
 	$(CC) -shared -o $@ $^ -L ../src -l:filament.a

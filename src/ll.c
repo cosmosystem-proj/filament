@@ -16,6 +16,31 @@
 
 #include <ll.h>
 #include <quanta/include/platform.h>
+#include <quanta/include/types.h>
+
+void filament_ll_append(filament_ll ll, void *data, size_t size) {
+  filament_ll_node node = filament_ll_node_factory();
+  filament_ll_node cur;
+
+  if (!node) {
+    return;
+  }
+
+  node->data.data = data;
+  node->data.size = size;
+
+  if (!(ll->start)) {
+    ll->start = node;
+  } else {
+    cur = ll->start;
+    while (cur->next) {
+      cur = cur->next;
+    }
+    cur->next = node;
+  }
+
+  return;
+}
 
 filament_ll filament_ll_factory() {
   struct filament_ll *ll;
@@ -28,4 +53,19 @@ filament_ll filament_ll_factory() {
   ll->start = NULL;
 
   return (filament_ll)ll;
+}
+
+filament_ll_node filament_ll_node_factory() {
+  struct filament_ll_node *llnode;
+
+  llnode = malloc_wrapper(sizeof(struct filament_ll_node));
+  if (!llnode) {
+    return NULL;
+  }
+
+  llnode->next = NULL;
+  llnode->data.data = NULL;
+  llnode->data.size = 0;
+
+  return (filament_ll_node)llnode;
 }

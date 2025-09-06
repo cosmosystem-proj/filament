@@ -14,11 +14,12 @@
 
 #include <quanta/include/types.h>
 
-#ifdef _FILAMENT_LL_PRIVATE
-struct filament_ll_data {
+typedef struct filament_ll_data {
   void *data;
   size_t size;
-};
+} filament_ll_data;
+
+#ifdef _FILAMENT_LL_PRIVATE
 struct filament_ll_node {
   struct filament_ll_node *next;
   struct filament_ll_data data;
@@ -26,6 +27,7 @@ struct filament_ll_node {
 
 struct filament_ll {
   struct filament_ll_node *start;
+  struct filament_ll_node *pos;
 };
 
 typedef struct filament_ll_node *filament_ll_node;
@@ -34,9 +36,9 @@ filament_ll_node filament_ll_node_factory();
 #endif
 
 typedef struct filament_ll *filament_ll;
-typedef struct filament_ll_data *filament_ll_data;
 
 void filament_ll_append(filament_ll ll, void *data, size_t size);
 filament_ll filament_ll_factory();
+filament_ll_data *filament_ll_next(filament_ll ll);
 
 #endif

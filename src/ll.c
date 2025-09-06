@@ -31,6 +31,7 @@ void filament_ll_append(filament_ll ll, void *data, size_t size) {
 
   if (!(ll->start)) {
     ll->start = node;
+    ll->pos = ll->start;
   } else {
     cur = ll->start;
     while (cur->next) {
@@ -51,8 +52,19 @@ filament_ll filament_ll_factory() {
   }
 
   ll->start = NULL;
+  ll->pos = NULL;
 
   return (filament_ll)ll;
+}
+
+filament_ll_data *filament_ll_next(filament_ll ll) {
+  if (!ll->pos) {
+    return NULL;
+  } else {
+    filament_ll_data *rv = &(ll->pos->data);
+    ll->pos = ll->pos->next;
+    return rv;
+  }
 }
 
 filament_ll_node filament_ll_node_factory() {

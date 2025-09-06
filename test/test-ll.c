@@ -77,8 +77,37 @@ bool test_ll_node_factory() {
   return true;
 }
 
+bool test_ll_next() {
+  size_t count = sizeof(testvals) / sizeof(testvals[0]);
+
+  filament_ll ll = filament_ll_factory();
+
+  for (uint64 i = 0; i < count; i++) {
+    filament_ll_append(ll, &testvals[i], sizeof(testvals[i]));
+  }
+
+  uint64 j = 0;
+
+  filament_ll_data *data;
+
+  while (data = filament_ll_next(ll)) {
+    printf("Value %lld is %lld, size %lld\n", j, *(uint64 *)(data->data),
+           data->size);
+    INDUCTION_SUBTEST("Values correct",
+                      ((*(uint64 *)data->data == testvals[j]) &&
+                       (data->size = sizeof(testvals[j]))))
+    j++;
+  }
+
+  filament_ll ll2 = filament_ll_factory();
+  INDUCTION_SUBTEST("Should return NULL on an empty list",
+                    (filament_ll_next(ll2) == NULL))
+  return true;
+}
+
 BEGIN_TEST_SET
 INDUCTION_TEST(test_ll_factory, "Test LL factory")
 INDUCTION_TEST(test_ll_node_factory, "Test LL node factory")
 INDUCTION_TEST(test_ll_append, "Test LL append")
+INDUCTION_TEST(test_ll_next, "Test LL next")
 END_TEST_SET

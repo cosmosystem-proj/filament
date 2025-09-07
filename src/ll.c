@@ -81,3 +81,11 @@ filament_ll_node filament_ll_node_factory() {
 
   return (filament_ll_node)llnode;
 }
+
+void filament_ll_rewind(filament_ll ll) {
+  if (ll && ll->start) {
+    ll->pos = ll->start;
+  }
+
+  return;
+}

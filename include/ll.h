@@ -40,5 +40,6 @@ typedef struct filament_ll *filament_ll;
 void filament_ll_append(filament_ll ll, void *data, size_t size);
 filament_ll filament_ll_factory();
 filament_ll_data *filament_ll_next(filament_ll ll);
+void filament_ll_rewind(filament_ll ll);
 
 #endif

@@ -105,9 +105,43 @@ bool test_ll_next() {
   return true;
 }
 
+bool test_ll_rewind() {
+  filament_ll ll = filament_ll_factory();
+
+  INDUCTION_SUBTEST("pos should be NULL", (ll->pos == NULL))
+
+  filament_ll_rewind(ll);
+
+  INDUCTION_SUBTEST("pos should still be NULL after rewind on an empty list",
+                    (ll->pos == NULL))
+
+  size_t count = sizeof(testvals) / sizeof(testvals[0]);
+
+  for (uint64 i = 0; i < count; i++) {
+    filament_ll_append(ll, &testvals[i], sizeof(testvals[i]));
+  }
+
+  INDUCTION_SUBTEST("pos should equal start after data is appended",
+                    (ll->pos == ll->start))
+
+  filament_ll_next(ll);
+  filament_ll_next(ll);
+  filament_ll_next(ll);
+
+  INDUCTION_SUBTEST("pos should NOT equal start after some next operations",
+                    (ll->pos != ll->start))
+
+  filament_ll_rewind(ll);
+  INDUCTION_SUBTEST("pos should equal start after rewind operation",
+                    (ll->pos == ll->start))
+
+  return true;
+}
+
 BEGIN_TEST_SET
 INDUCTION_TEST(test_ll_factory, "Test LL factory")
 INDUCTION_TEST(test_ll_node_factory, "Test LL node factory")
 INDUCTION_TEST(test_ll_append, "Test LL append")
 INDUCTION_TEST(test_ll_next, "Test LL next")
+INDUCTION_TEST(test_ll_rewind, "Test LL rewind")
 END_TEST_SET

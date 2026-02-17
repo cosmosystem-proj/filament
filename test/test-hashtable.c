@@ -40,7 +40,7 @@ bool test_hashtable_factory() {
   uint64 size = 256;
   uint64 version = 0;
 
-  tbl = filament_hashtable_factory(size);
+  tbl = filament_hashtable_factory(size, 0);
 
   if (!tbl) {
     printf("\tAllocation failed\n");
@@ -70,55 +70,8 @@ bool test_hashtable_factory() {
   return true;
 }
 
-bool test_entry_factory() {
-  const char *key = "Liverpool club song";
-  const char *value = "You'll Never Walk Alone";
-
-  filament_hashtable_entry *entry = filament_hashtable_entry_factory(
-      (void *)key, strlen(key) + 1, (void *)value, strlen(value) + 1);
-
-  if (!entry) {
-    printf("\tFailed to allocate entry\n");
-    return false;
-  }
-
-  if (strcmp(key, entry->key) != 0) {
-    printf("\tKey not a match, should be %s but is %s\n", key, entry->key);
-    return false;
-  }
-
-  if (entry->key_len != strlen(key) + 1) {
-    printf("\tKey length not a match, should be %lli but is %lli\n",
-           strlen(key) + 1, entry->key_len);
-    return false;
-  }
-
-  if (strcmp(value, entry->value) != 0) {
-    printf("\tValue not a match, should be %s but is %s\n", value,
-           entry->value);
-    return false;
-  }
-
-  if (entry->value_len != strlen(value) + 1) {
-    printf("\tValue length not a match, should be %lli but is %lli\n",
-           strlen(value) + 1, entry->value_len);
-    return false;
-  }
-
-  if (entry->left) {
-    printf("\tleft pointer not null\n");
-    return false;
-  }
-
-  if (entry->right) {
-    printf("\tright pointer not null\n");
-  }
-
-  return true;
-}
-
 bool test_hashtable_size() {
-  filament_hashtable *table = filament_hashtable_factory(256);
+  filament_hashtable *table = filament_hashtable_factory(256, 0);
 
   if (!table) {
     printf("\tTable creation failed\n");
@@ -135,7 +88,7 @@ bool test_hashtable_size() {
 }
 
 bool test_insertion() {
-  filament_hashtable *table = filament_hashtable_factory(256);
+  filament_hashtable *table = filament_hashtable_factory(256, 0);
   const char *key = "Liverpool club song";
   const char *value = "You'll Never Walk Alone";
 
@@ -166,7 +119,6 @@ bool test_insertion() {
 BEGIN_TEST_SET
 INDUCTION_TEST(test_hashing, "Test hashing")
 INDUCTION_TEST(test_hashtable_factory, "Hashtable factory test")
-INDUCTION_TEST(test_entry_factory, "Entry factory test")
 INDUCTION_TEST(test_hashtable_size, "Hashtable size retrieval test")
 INDUCTION_TEST(test_insertion, "Insertion test")
 END_TEST_SET

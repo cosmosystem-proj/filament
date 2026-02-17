@@ -7,6 +7,7 @@
  * See file LICENSE for full licensing information.
  */
 
+#include <bst.h>
 #include <include/hashtable.h>
 #include <quanta/include/platform.h>
 #include <quanta/include/types.h>
@@ -25,10 +26,9 @@ uint64 filament_hashtable_bucket_calc(filament_hash hash,
   return hash % filament_hashtable_size(table);
 }
 
-filament_hashtable *filament_hashtable_factory(uint64 size) {
-  filament_hashtable *new =
-      malloc_wrapper(sizeof(filament_hashtable) +
-                     ((size_t)size * sizeof(filament_hashtable_entry *)));
+filament_hashtable *filament_hashtable_factory(uint64 size, qword flags) {
+  filament_hashtable *new = malloc_wrapper(
+      sizeof(filament_hashtable) + ((size_t)size * sizeof(filament_bst)));
 
   // Return NULL on error
   if (!new) {
@@ -39,32 +39,10 @@ filament_hashtable *filament_hashtable_factory(uint64 size) {
   new->version = 0;
 
   for (uint64 i = 0; i < size; i++) {
-    new->contents[i] = NULL;
+    new->contents[i] = filament_bst_factory();
   }
 
   return new;
-}
-
-filament_hashtable_entry *filament_hashtable_entry_factory(void *key,
-                                                           uint64 key_len,
-                                                           void *value,
-                                                           uint64 value_len) {
-  filament_hashtable_entry *entry =
-      malloc_wrapper(sizeof(filament_hashtable_entry));
-
-  if (!entry) {
-    return NULL;
-  }
-
-  entry->key = key;
-  entry->key_len = key_len;
-  entry->value = value;
-  entry->value_len = value_len;
-  entry->hash = filament_hashtable_hash(key, key_len);
-  entry->left = NULL;
-  entry->right = NULL;
-
-  return entry;
 }
 
 bool filament_hashtable_insert(filament_hashtable *table, void *key,
@@ -74,23 +52,17 @@ bool filament_hashtable_insert(filament_hashtable *table, void *key,
     return false;
   }
 
-  filament_hashtable_entry *entry =
-      filament_hashtable_entry_factory(key, key_len, value, value_len);
-
-  if (!entry) {
-    return false;
-  }
-
   filament_hash hash = filament_hashtable_hash(key, key_len);
 
   uint64 bucket = filament_hashtable_bucket_calc(hash, table);
 
-  return filament_hashtable_bucket_put(table, bucket, entry, hash);
+  return filament_hashtable_bucket_put(table, bucket, key, key_len, value,
+                                       value_len);
 }
 
 bool filament_hashtable_bucket_put(filament_hashtable *table, uint64 bucket,
-                                   filament_hashtable_entry *entry,
-                                   filament_hash hash) {
+                                   void *key, size_t key_len, void *value,
+                                   size_t value_len) {
 
   if (bucket > table->size - 1) {
     return false;
@@ -100,23 +72,8 @@ bool filament_hashtable_bucket_put(filament_hashtable *table, uint64 bucket,
     return false;
   }
 
-  // walk the tree to find the appropriate location to insert
-  filament_hashtable_entry **current = &(table->contents[bucket]);
-
-  while (*current) {
-    if (hash < (*current)->hash) {
-      current = &((*current)->left);
-    } else if (hash > (*current)->hash) {
-      current = &((*current)->right);
-    } else {
-      // we've found an identical entry
-      return false;
-    }
-  }
-
-  *current = entry;
-
-  return true;
+  return filament_bst_insert(table->contents[bucket], key, key_len, value,
+                             value_len);
 }
 
 uint64 filament_hashtable_size(filament_hashtable *table) {

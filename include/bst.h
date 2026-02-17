@@ -8,8 +8,8 @@
  * See file LICENSE for full licensing information.
  */
 
-#ifndef _FILAMENT_BST_H
-#define _FILAMENT_BST_H
+#ifndef FILAMENT_BST_H
+#define FILAMENT_BST_H
 
 #include <quanta/include/types.h>
 

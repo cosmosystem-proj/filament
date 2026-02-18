@@ -25,6 +25,8 @@ typedef struct filament_hashtable {
   filament_bst contents[];
 } filament_hashtable;
 
+typedef filament_bst_result filament_hashtable_result;
+
 // we do this so we can test stuff in clang-repl without it complaining because
 // functions aren't name-mangled
 #ifdef __cplusplus
@@ -32,6 +34,8 @@ extern "C" {
 #endif
 
 filament_hashtable *filament_hashtable_factory(uint64 size, qword flags);
+filament_hashtable_result filament_hashtable_find(filament_hashtable *table,
+                                                  void *key, size_t key_len);
 filament_hash filament_hashtable_hash(void *key, size_t len);
 uint64 filament_hashtable_size(filament_hashtable *table);
 bool filament_hashtable_bucket_put(filament_hashtable *table, uint64 bucket,
@@ -39,8 +43,6 @@ bool filament_hashtable_bucket_put(filament_hashtable *table, uint64 bucket,
                                    size_t value_len);
 bool filament_hashtable_insert(filament_hashtable *table, void *key,
                                size_t key_len, void *value, size_t value_len);
-void *filament_hashtable_search(filament_hashtable *table, void *key,
-                                size_t key_len, size_t *value_len);
 
 #ifdef __cplusplus
 }

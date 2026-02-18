@@ -45,6 +45,18 @@ filament_hashtable *filament_hashtable_factory(uint64 size, qword flags) {
   return new;
 }
 
+filament_hashtable_result filament_hashtable_find(filament_hashtable *table,
+                                                  void *key, size_t key_len) {
+  filament_hash hash = filament_hashtable_hash(key, key_len);
+
+  uint64 bucket = filament_hashtable_bucket_calc(hash, table);
+
+  filament_hashtable_result r = (filament_hashtable_result)filament_bst_find(
+      table->contents[bucket], key, key_len);
+
+  return r;
+}
+
 bool filament_hashtable_insert(filament_hashtable *table, void *key,
                                size_t key_len, void *value, size_t value_len) {
   // ensure valid values
@@ -82,16 +94,6 @@ uint64 filament_hashtable_size(filament_hashtable *table) {
   }
 
   return table->size;
-}
-
-void *filament_hashtable_search(filament_hashtable *table, void *key,
-                                size_t key_len, size_t *value_len) {
-  // value_len can be null if the caller does not need to know the length
-  // return null if not found
-
-  filament_hash hash = filament_hashtable_hash(key, key_len);
-
-  uint64 bucket = filament_hashtable_bucket_calc(hash, table);
 }
 
 filament_hash filament_hashtable_hash(void *key, size_t len) {

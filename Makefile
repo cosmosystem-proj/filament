@@ -8,6 +8,7 @@
 
 export FILAMENT_INCLUDE=./include
 export QUANTA_INCLUDE=.
+export BASE_INCLUDE=./include
 
 .PHONY: test
 

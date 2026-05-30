@@ -11,7 +11,7 @@
 #ifndef FILAMENT_BST_H
 #define FILAMENT_BST_H
 
-#include <quanta/include/types.h>
+#include <quanta/types.h>
 
 typedef struct filament_bst_node filament_bst_node;
 typedef struct filament_bst_node {

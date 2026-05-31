@@ -12,7 +12,7 @@
 #ifndef _FILAMENT_LL_H
 #define _FILAMENT_LL_H
 
-#include <quanta/include/types.h>
+#include <quanta/types.h>
 
 typedef struct filament_ll_data {
   void *data;

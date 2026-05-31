@@ -12,7 +12,7 @@
 #define FILAMENT_HASHTABLE_H
 
 #include <bst.h>
-#include <quanta/include/types.h>
+#include <quanta/types.h>
 
 typedef uint64 filament_hash;
 typedef bool (*filament_hashtable_cmp_callback)(void *, void *);
